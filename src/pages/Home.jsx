@@ -38,6 +38,7 @@ export function HomePage() {
     return () => { mounted = false; requireApi().removeChannel(channel); };
   }, [load, user.id]);
   const completed = useMemo(() => logs.filter((log) => log.date === todayString() && log.completed).length, [logs]);
+  const completionPercent = items.length ? Math.min(100, Math.round((completed / items.length) * 100)) : 0;
   const name = displayName(user, profile);
   const dateLabel = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date());
   return <section className="page-section">
@@ -46,7 +47,7 @@ export function HomePage() {
     </header>
     {error && <div className="notice error">{error}</div>}
     {loading ? <div className="card-loading"><span className="spinner" /> Loading your habits…</div> : items.length === 0 ? <div className="empty-card"><span className="empty-illustration">🌱</span><h2>No habits to check in yet</h2><p>Find your people, choose a goal, and build a little momentum together.</p><div className="empty-actions"><Link className="button primary" to="/groups"><Users size={17} /> Browse groups</Link><Link className="button secondary" to="/groups/new"><Plus size={17} /> Create a group</Link></div></div> :
-      <><div className="section-title-row"><div><p className="eyebrow">ONE DAY AT A TIME</p><h2>Your habits</h2></div><Link className="subtle-link" to="/groups">View your groups <ArrowRight size={16} /></Link></div>
+      <><section className="daily-spark" aria-label="Today's habit progress" style={{ '--spark-progress': `${completionPercent}%` }}><div className="daily-spark-copy"><p className="eyebrow">YOUR MOMENTUM TODAY</p><h2>A little progress adds up.</h2><p>{completed === items.length ? 'Every habit is checked in. Your spark is shining bright.' : 'Keep showing up for yourself. Your spark is growing.'}</p><div className="spark-progress-label"><span>{completed} of {items.length} habits complete</span><b>{completionPercent}%</b></div><div className="spark-progress-track"><span /></div></div><div className="spark-orb" aria-hidden="true"><span className="spark-orb-core">✦</span><i /><i /><i /></div></section><div className="section-title-row"><div><p className="eyebrow">ONE DAY AT A TIME</p><h2>Your habits</h2></div><Link className="subtle-link" to="/groups">View your groups <ArrowRight size={16} /></Link></div>
       <div className="habit-grid">{items.map(({ habit, groupName }) => <HabitCheckIn key={habit.id} habit={habit} groupName={groupName} user={user} profile={profile} logs={logs} onSaved={() => load().catch((err) => setError(err.message))} />)}</div></>}
   </section>;
 }
