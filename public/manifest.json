@@ -1,0 +1,12 @@
+{
+  "name": "Emberly — Keep your spark alive.",
+  "short_name": "Emberly",
+  "description": "Build habits together and track classroom reading.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f8fc",
+  "theme_color": "#1a2d69",
+  "icons": [
+    { "src": "/emberly-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
